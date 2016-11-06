@@ -31,10 +31,10 @@
     [[self collectionView]setDelegate:self];
     
     timer = [NSTimer scheduledTimerWithTimeInterval:0.5f
-                                                  target:self
-                                                selector:@selector(showTime)
-                                                userInfo:NULL
-                                                 repeats:YES];
+                                             target:self
+                                           selector:@selector(showTime)
+                                           userInfo:NULL
+                                            repeats:YES];
     
     // Category Food Carbs Protein Fats Calories
     ingredients =
@@ -58,7 +58,7 @@
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"Rice", @"35", @"3", @"0", @"150", nil],
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"Chicken", @"1", @"21", @"3", @"120", nil],
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"Pizza-Slice", @"35", @"13", @"12", @"300", nil],
-     [NSArray arrayWithObjects:@"Lunch/Dinner", @"Ground Beef", @"0", @"23", @"8", @"200", nil],
+     [NSArray arrayWithObjects:@"Lunch/Dinner", @"BeafsteakTomato", @"0", @"23", @"8", @"200", nil],
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"Gourmet-Burger", @"3", @"22", @"12", @"200", nil],
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"BeefsteakTomato", @"5", @"1", @"0", @"25", nil],
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"RedPepper", @"9", @"1", @"0", @"46", nil],
@@ -74,14 +74,14 @@
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"Pasta", @"42", @"7", @"1", @"200", nil], nil];
     
     /*recipes =
-    [NSArray arrayWithObjects:
+     [NSArray arrayWithObjects:
      [NSArray arrayWithObjects:@"Cereal", @"71", @"19", @"14", nil],
      [NSArray arrayWithObjects:@"PBJ Oatmeal", @"29", @"9", @"17", nil],
      [NSArray arrayWithObjects:@"Soup Lunch", @"31", @"17", @"12", nil],
      [NSArray arrayWithObjects:@"Bunless Burger", @"5", @"15", @"20", nil], nil];*/
-
     
-        
+    
+    
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     static dispatch_once_t once;
@@ -91,8 +91,8 @@
         // run once code goes here
         [userDefaults setObject:[[NSMutableArray alloc] init] forKey:@"1"];
     });
-
-
+    
+    
     yourArray = [[[NSUserDefaults standardUserDefaults] arrayForKey:@"1"] mutableCopy];
     
     CGRect collectionFrame = [self.collectionView frame];
@@ -100,9 +100,9 @@
     if (image != nil){
         CGRect collectionFrame = [self.collectionView frame];
         [self.collectionView setFrame:CGRectMake(collectionFrame.origin.x,
-                                                     collectionFrame.origin.y,
-                                                     collectionFrame.size.width,
-                                                     collectionFrame.size.height + 110*([yourArray count]-[yourArray count]%3)/3)];
+                                                 collectionFrame.origin.y,
+                                                 collectionFrame.size.width,
+                                                 collectionFrame.size.height + 110*([yourArray count]-[yourArray count]%3)/3)];
         
         
         CGRect labelFrame = [timeLabel frame];
@@ -112,6 +112,20 @@
         
         
         [yourArray addObject:image];
+    }
+    
+    else if ([yourArray count] > 0){
+        CGRect collectionFrame = [self.collectionView frame];
+        [self.collectionView setFrame:CGRectMake(collectionFrame.origin.x,
+                                                 collectionFrame.origin.y,
+                                                 collectionFrame.size.width,
+                                                 collectionFrame.size.height + 110*([yourArray count]-[yourArray count]%3)/3)];
+        
+        
+        CGRect labelFrame = [timeLabel frame];
+        [timeLabel setFrame:CGRectMake(labelFrame.origin.x, labelFrame.origin.y+110*([yourArray count]-[yourArray count]%3)/3+110, labelFrame.size.width, labelFrame.size.height)];
+        CGRect backFrame = [_timeBack frame];
+        [_timeBack setFrame:CGRectMake(backFrame.origin.x, backFrame.origin.y+110*([yourArray count]-[yourArray count]%3)/3+110, backFrame.size.width, backFrame.size.height)];
     }
     
     [userDefaults setObject:yourArray forKey:@"1"];
@@ -145,11 +159,15 @@
     percentFat = fatIntake / totalFat;
     percentProtein = proteinIntake / totalProtein;
     
+    _carbLabel.text = [@"Carbohydrate: " stringByAppendingString:[[NSString stringWithFormat:@"%g", percentCarb*100] stringByAppendingString:@"%"]];
+    _proteinLabel.text = [@"Protein: " stringByAppendingString:[[NSString stringWithFormat:@"%g", percentProtein*100] stringByAppendingString:@"%"]];
+    _fatLabel.text = [@"Fat :" stringByAppendingString:[[NSString stringWithFormat:@"%g", percentFat*100] stringByAppendingString:@"%"]];
+    
     targetFat = percentFat;
     targetCarb = percentCarb;
     targetProtein = percentProtein;
-
-
+    
+    
     NSMutableArray *smallestChange = [[NSMutableArray alloc] init];
     for (int i =0; i < [ingredients count]; i++){
         changeCarb = fabs(targetCarb - [[[ingredients objectAtIndex:i] objectAtIndex:2] intValue] / totalCarb);
