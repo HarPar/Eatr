@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:LogFood.xcodeproj">
+      location = "self:/Users/HarPar/Desktop/Eatr/Eatr.xcodeproj">
    </FileRef>
 </Workspace>

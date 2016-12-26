@@ -58,7 +58,6 @@
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"Rice", @"35", @"3", @"0", @"150", nil],
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"Chicken", @"1", @"21", @"3", @"120", nil],
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"Pizza-Slice", @"35", @"13", @"12", @"300", nil],
-     [NSArray arrayWithObjects:@"Lunch/Dinner", @"BeafsteakTomato", @"0", @"23", @"8", @"200", nil],
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"Gourmet-Burger", @"3", @"22", @"12", @"200", nil],
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"BeefsteakTomato", @"5", @"1", @"0", @"25", nil],
      [NSArray arrayWithObjects:@"Lunch/Dinner", @"RedPepper", @"9", @"1", @"0", @"46", nil],
@@ -154,14 +153,13 @@
     //Find BREAKFAST SCOREEE
     
     
-    
     percentCarb = carbIntake / totalCarb;
     percentFat = fatIntake / totalFat;
     percentProtein = proteinIntake / totalProtein;
     
-    _carbLabel.text = [@"Carbohydrate: " stringByAppendingString:[[NSString stringWithFormat:@"%g", percentCarb*100] stringByAppendingString:@"%"]];
-    _proteinLabel.text = [@"Protein: " stringByAppendingString:[[NSString stringWithFormat:@"%g", percentProtein*100] stringByAppendingString:@"%"]];
-    _fatLabel.text = [@"Fat :" stringByAppendingString:[[NSString stringWithFormat:@"%g", percentFat*100] stringByAppendingString:@"%"]];
+    _carbLabel.text = [@"Current Carbohydrate: " stringByAppendingString:[[NSString stringWithFormat:@"%.2f", percentCarb*100] stringByAppendingString:@"%"]];
+    _proteinLabel.text = [@"Current Protein: " stringByAppendingString:[[NSString stringWithFormat:@"%.2f", percentProtein*100] stringByAppendingString:@"%"]];
+    _fatLabel.text = [@"Current Fat :" stringByAppendingString:[[NSString stringWithFormat:@"%.2f", percentFat*100] stringByAppendingString:@"%"]];
     
     targetFat = percentFat;
     targetCarb = percentCarb;
@@ -173,8 +171,8 @@
         changeCarb = fabs(targetCarb - [[[ingredients objectAtIndex:i] objectAtIndex:2] intValue] / totalCarb);
         changeFat = fabs(targetFat - [[[ingredients objectAtIndex:i] objectAtIndex:4] intValue] / totalFat);
         changeProtein = fabs(targetProtein - [[[ingredients objectAtIndex:i] objectAtIndex:3] intValue] / totalProtein);
-        double totalChange = changeCarb+changeFat+changeProtein;
-        NSLog(@"%f", totalChange);
+        double totalChange = MIN(MIN(changeCarb, changeFat), changeProtein);
+        //NSLog(@"%f", totalChange);
         [smallestChange addObject:[NSString stringWithFormat:@"%g", totalChange]];
     }
     
